@@ -111,7 +111,7 @@ var MyToolsAgent = {
 	},
 	show: function(tools){
 		console.log("show tools", tools)
-		$("#myPanel").html("")
+		$("#myPanel #content").html("")
 		if(!Array.isArray(tools) || tools.length <= 0){
 			return;
 		}
@@ -119,7 +119,7 @@ var MyToolsAgent = {
 			var myTemplate = '<div class="panel-element"><div class="panel-tag"><div class="collect tag-right" data-id="ID"><i class="fa fa-times" aria-hidden="true"></i></div></div><div class="panel-content"><a href="URL"><img src="IMG" alt="ALT" class="img-thumbnail"></a><div class="panel-row panel-title">TITLE</div></div></div>';
 			var element = tools[i]
 			var one = myTemplate.replace("URL", element.url).replace("IMG", element.img).replace("ALT", element.title).replace("TITLE", element.title).replace("ID", element.id)
-			$("#myPanel").append(one)
+			$("#myPanel #content").append(one)
 		}
 		addListener()
 	},
@@ -160,7 +160,7 @@ var MarketToolsAgent = {
 		MarketToolsAgent.show(this.tools)
 	},
 	show: function(tools){
-		$("#marketPanel").html("")
+		$("#marketPanel #content").html("")
 		var myTools = MyToolsAgent.getTools()
 		for (var i = 0; i < tools.length; i++) {
 			var myTemplate = '<div class="panel-element"><div class="panel-tag"><div class="collect tag-right LIKE" data-id="ID"><i class="fa fa-heart" aria-hidden="true"></i></div></div><div class="panel-content"><a href="URL"><img src="IMG" alt="ALT" class="img-thumbnail"></a><div class="panel-row panel-title">TITLE</div></div></div>';
@@ -171,7 +171,7 @@ var MarketToolsAgent = {
 			}else{
 				one = one.replace("LIKE", "")
 			}
-			$("#marketPanel").append(one)
+			$("#marketPanel #content").append(one)
 		}
 		addListener()
 	},
@@ -209,45 +209,57 @@ $("#about").click(function(){
 
 function showMyPanel(){
 	isMy = true;
-	$("#my").removeClass("bg-gray")
-	$("#my").addClass("bg-white")
-	$("#market").removeClass("bg-white")
-	$("#market").addClass("bg-gray")
+	$(".nav").find("li").removeClass("active")
+	if($("#my").hasClass("active")){
+		return;
+	}
+	$("#my").addClass("active");
+
 	$("#myPanel").removeClass("hidden")
-	$("#marketPanel").removeClass("hidden")
-	$("#marketPanel").addClass("hidden")
-	$("#aboutPanel").removeClass("hidden")
-	$("#aboutPanel").addClass("hidden")
-	$(".search").removeClass("hidden")
-	$("#search").focus()
+	if(!$("#marketPanel").hasClass("hidden")){
+		$("#marketPanel").addClass("hidden")	
+	}
+	if(!$("#aboutPanel").hasClass("hidden")){
+		$("#aboutPanel").addClass("hidden")	
+	}
+	
+	$("#myPanel #search").focus()
 
 	MyToolsAgent.showTools()
 }
 
 function showMarketPanel(){
 	isMy = false;
-	$("#market").removeClass("bg-gray")
-	$("#market").addClass("bg-white")
-	$("#my").removeClass("bg-white")
-	$("#my").addClass("bg-gray")
+	$(".nav").find("li").removeClass("active")
+	if($("#market").hasClass("active")){
+		return;
+	}
+	$("#market").addClass("active");
 	$("#marketPanel").removeClass("hidden")
-	$("#myPanel").removeClass("hidden")
-	$("#myPanel").addClass("hidden")
-	$("#aboutPanel").removeClass("hidden")
-	$("#aboutPanel").addClass("hidden")
-	$(".search").removeClass("hidden")
-	$("#search").focus()
+	if(!$("#myPanel").hasClass("hidden")){
+		$("#myPanel").addClass("hidden")	
+	}
+	if(!$("#aboutPanel").hasClass("hidden")){
+		$("#aboutPanel").addClass("hidden")	
+	}
+	$("#marketPanel #search").focus()
 	MarketToolsAgent.getTools()
 }
 
 function showAbout(){
-	$("#myPanel").removeClass("hidden")
-	$("#myPanel").addClass("hidden")
-	$("#marketPanel").removeClass("hidden")
-	$("#marketPanel").addClass("hidden")
+	$(".nav").find("li").removeClass("active")
+	if($("#about").hasClass("active")){
+		return;
+	}
+	$("#about").addClass("active");
 	$("#aboutPanel").removeClass("hidden")
-	$(".search").removeClass("hidden")
-	$(".search").addClass("hidden")
+	if(!$("#myPanel").hasClass("hidden")){
+		$("#myPanel").addClass("hidden")	
+	}
+	if(!$("#marketPanel").hasClass("hidden")){
+		$("#marketPanel").addClass("hidden")	
+	}
+	$("#aboutPanel #search").focus()
 }
 
 $(document).keypress(function(e){

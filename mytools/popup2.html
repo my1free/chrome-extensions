@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <style>
+    body {
+      width: 600px;
+      max-height: 100%;
+      vertical-align:middle;
+    }
+    .title{
+      text-align: center;
+    }
+    .myrow{
+      width: 100%;
+      margin: 0;
+    }
+    .panel-element{
+      display: inline-block;
+      width: 120px;
+      height: 120px;
+      margin-top: 60px;
+      margin-left: 50px;
+      text-align: center;
+      position: relative;
+    }
+    .panel-element img{
+      width: 120px;
+      height: 120px;
+    }
+    .panel-tag{
+      position: absolute;
+      z-index: 99;
+      top: -16px;
+      font-size: 25px;
+    }
+    .panel-tag .tag-left{
+      display: inline-block;
+      position: absolute;
+      left: -4px;
+    }
+    .panel-tag .tag-right{
+      display: inline-block;
+      position: absolute;
+      left: 107px;
+      cursor: pointer;
+    }
+    .panel{
+      margin-top: 100px;
+    }
+    #myPanel .panel-tag .tag-right{
+      color: #f1f1f1;
+    }
+    #marketPanel .panel-tag .tag-right{
+      color: gray;
+    }
+    #myPanel .panel-tag .tag-right:hover{
+      color: #fd8a90;
+    }
+    #marketPanel .panel-tag .tag-right:hover{
+      color: #fd8a90;
+    }
+    .panel-content{
+      position: absolute;
+    }
+    .search{
+      margin-top: 70px;
+      width: 80%;
+      margin-left: 5%;
+      position: fixed;
+      top: 0;
+      background-color: white;
+      z-index: 999;
+    }
+    .tab{
+      position: fixed;
+      top: 0;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 999;
+    }
+    .left{
+      padding: 5px;
+      width: 40%;
+      display: inline-block;
+      text-align: center;
+    }
+    .right{
+      width: 40%;
+      padding: 5px;
+      display: inline-block;
+      text-align: center;
+
+    }
+    .about{
+      display: inline-block;
+      text-align: center;
+      background-color: #e8e8e8;
+      padding: 5px;
+      color: #3ec8fd;
+      border-radius: 40px;
+      font-size: 10px;
+    }
+    #aboutPanel{
+      text-align: center;
+    }
+    #aboutPanel img{
+      width: 150px;
+      height: 200px;
+    }
+    .footer{
+      width: 1px;
+      margin-bottom: 100px;
+    }
+    .bg-gray{
+      background-color: gray;
+    }
+    .bg-white{
+      background-color: white;
+    }
+    .panel-row{
+      width: 120px;
+    }
+    .panel-like-num{
+      width: 80px;
+      display: inline-block;
+    }
+    .panel-like-btn{
+      width: 20px;
+      font-size: 20px;
+      display: inline-block;
+    }
+    .ft-red{
+      color: red !important;
+    }
+    #searchBtn{
+      cursor: pointer;
+    }
+    .pd-50{
+      padding: 50px;
+    }
+
+  </style>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <title>MY Tools</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+  <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    </head>
+    <body>
+
+      <div class="myrow tab">
+        <div id="my" class="left bg-white">我的收藏</div>
+        <div id="market" class="right bg-gray">工具市场</div>
+        <div id="about" class="about">关于</div>
+      </div>
+      <div class="myrow search">
+        <div class="input-group">
+          <input id="search" type="text" class="form-control" id="inputGroupSuccess2" aria-describedby="inputGroupSuccess2Status">
+          <span id="searchBtn" class="input-group-addon">🔍</span>
+        </div>
+      </div>
+
+      <div id="myPanel" class="myrow panel">
+      </div>
+      <div id="marketPanel" class="myrow panel hidden">
+      </div>
+      <div id="aboutPanel" class="myrow panel hidden">
+        <div>MY工具QQ交流群</div>
+        <img src="http://opop7qzgu.bkt.clouddn.com/myTools.jpeg" alt="..." class="img-thumbnail">
+      </div>
+
+      <div class="footer"></div>
+    </body>
+    <script src="jquery.1.12.4.min.js"></script>
+    <script src="bootstrap.3.3.7.min.js"></script>
+    <script src="popup.js"></script>
+    
+</html>
