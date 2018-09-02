@@ -2,7 +2,7 @@
     "name": "MyTools",
     "version": "0.0.0.1",
     "description": "MY工具箱",
-    "permissions": ["activeTab", "declarativeContent", "storage", "https://www.woainankai.com/*"],
+    "permissions": ["activeTab", "bookmarks", "declarativeContent", "storage", "https://www.woainankai.com/*"],
     "background": {
       "scripts": ["background.js"],
       "persistent": false

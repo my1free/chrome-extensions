@@ -18,7 +18,8 @@
     display: inline-block;
     width: 120px;
     height: 120px;
-    margin-top: 60px;
+    margin-top: 30px;
+    margin-bottom: 30px;
     margin-left: 50px;
     text-align: center;
     position: relative;
@@ -27,11 +28,46 @@
     width: 120px;
     height: 120px;
   }
+  /*#bookmarkPanel .panel-element .panel-content a{
+    display: block;
+    word-wrap: break-word; 
+    word-break: normal; 
+    font-size: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: center;
+    width: 400px;
+    height: 120px;
+    text-align: left;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+  }*/
+
+  #bookmarkPanel .list-group{
+    margin-left: 70px;
+    width: 490px;
+  }
+  #bookmarkPanel .list-group a{
+    padding: 1px;
+    text-align: left;
+  }
+
+  #bookmarkPanel .panel-element{
+    display: block;
+    width: 400px;
+    height: 120px;
+  }
+
   .panel-tag{
     position: absolute;
     z-index: 99;
     top: -16px;
     font-size: 25px;
+  }
+  .panel-title{
+    text-overflow:ellipsis;
+    overflow:hidden;
   }
   .panel-tag .tag-left{
     display: inline-block;
@@ -142,7 +178,7 @@
 
 
   .my-tab{
-    width: 40%;
+    width: 30%;
     text-align: center;
     font-size: 16px;
     line-height: 1.42857143;
@@ -156,7 +192,7 @@
     background-color: #eee;
   }
   .my-about{
-    width: 20%;
+    width: 10%;
     text-align: center;
     font-size: 16px;
     line-height: 1.42857143;
@@ -179,7 +215,7 @@
     margin-left: 10%;
     margin-right: 10%;
     width: 80%;
-    margin-top: 30px;
+    margin-top: 50px;
   }
   .nav-tabs>li>div {
     margin-right: 2px;
@@ -195,11 +231,30 @@
   .my-panel{
     margin-top: 30px;
   }
+  #addMore{
+    width: 540px;
+    padding: 0px 0px 0px 80px;
+  }
+  #addMore .img{
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin-top: 5px;
+    background-color: #eee;
+  }
+  #addMore .content{
+    width: 340px;
+    margin-left: 20px;
+    float: left;
+  }
+  #addMore .content input{
+    margin-top: 2px;
+  }
   #content{
     overflow-y: scroll;
     max-height: 400px;
     margin-top: 10px;
-    margin-bottom: 50px;
+    padding: 0px 30px 60px 30px;
   }
 </style>
 <meta charset="utf-8">
@@ -224,11 +279,22 @@
       <div class="row my-nav">
         <ul class="nav nav-tabs">
           <li id="my" role="presentation" class="active my-tab">我的收藏</li>
+          <li id="bookmark" role="presentation" class="my-tab">书签搜索</li>
           <li id="market" role="presentation" class="my-tab">工具市场</li>
           <li id="about" role="presentation" class="my-about">
             <span class="label label-info">关于</span>
           </li>
         </ul>
+      </div>
+      <div id="bookmarkPanel" class="row my-panel hidden">
+        <div class="row">
+          <div class="input-group my-search">
+            <input id="search" type="text" class="form-control" id="inputGroupSuccess2" aria-describedby="inputGroupSuccess2Status">
+            <span id="searchBtn" class="input-group-addon">🔍</span>
+          </div>
+            <ul class="list-group">
+            </ul>
+        </div>
       </div>
       <div id="myPanel" class="row my-panel">
         <div class="row">
@@ -236,7 +302,20 @@
             <input id="search" type="text" class="form-control" id="inputGroupSuccess2" aria-describedby="inputGroupSuccess2Status">
             <span id="searchBtn" class="input-group-addon">🔍</span>
           </div>
-          <div id="content" class="row"></div>
+          <div id="content" class="row">
+          </div>
+          <div id="addMore" class="row">
+            <div class="img img-thumbnail"></div>
+            <div class="content">
+              <input type="text" class="form-control" id="title" placeholder="名称">
+              <input type="text" class="form-control" id="thumbnail" placeholder="缩略图">
+              <input type="text" class="form-control" id="url" placeholder="URL">
+            </div>
+            <div style="text-align: right; margin-top: 2px;">
+              <button type="submit" class="btn btn-success">保存</button>
+              <button type="submit" class="btn btn-warning">取消</button>
+            </div>
+          </div>
         </div>
       </div>
       <div id="marketPanel" class="row my-panel hidden">

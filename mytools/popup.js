@@ -6,7 +6,7 @@
 var isMy = true;
 
 document.addEventListener('DOMContentLoaded', function () {
-	MyToolsAgent.showTools()
+	// MyToolsAgent.showTools()
 })
 
 var ToolsAgent = {
@@ -68,6 +68,32 @@ var StoreAgent = {
 	},
 }
 
+var PanelAgent = {
+	panelList: ["myPanel", "bookmarkPanel", "marketPanel", "aboutPanel"],
+	clearAllPanel: function(){
+		$(".nav").find("li").removeClass("active")
+		this.panelList.forEach(function(e, i){
+			var $dom = $("#" + e)
+			if(!$dom.hasClass("hidden")){
+				$dom.addClass("hidden")	
+			}
+		})
+	},
+	showPannel: function(id){
+		var $dom = $("#" + id + "Panel")
+		if($("#" + id).hasClass("active")){
+			return
+		}
+		this.clearAllPanel()
+
+		$("#" + id).addClass("active")
+		$("#" + id + "Panel").removeClass("hidden")
+		$("#" + id + "Panel #search").val("")
+		$("#" + id + "Panel #search").focus()
+		bindEnter($("#" + id + "Panel #searchBtn"))
+	}
+}
+
 var MyToolsAgent = {
 	tools: [],
 	getTools: function(){
@@ -101,9 +127,9 @@ var MyToolsAgent = {
 		StoreAgent.getTools(this, function(tools){
 			console.log("my tools", tools)
 			if(!Array.isArray(tools) || tools.length <= 0){
-				$("#myPanel").html("")
-				var html = "<div class='pd-50'>还没有工具？<a href='#' id='go'>去市场看看</a></div>"
-				$("#myPanel").append(html)
+				$("#myPanel #content").html("")
+				var html = "<div class='pd-50'>还没有工具？<a href='#' id='go' style='font-size:20px;'>去市场看看    > ></a></div>"
+				$("#myPanel #content").append(html)
 			}else{
 				MyToolsAgent.show(tools)				
 			}
@@ -121,10 +147,13 @@ var MyToolsAgent = {
 			var one = myTemplate.replace("URL", element.url).replace("IMG", element.img).replace("ALT", element.title).replace("TITLE", element.title).replace("ID", element.id)
 			$("#myPanel #content").append(one)
 		}
+		var addBtn = '<div class="panel-element"><div class="panel-content"><a href="#"><img src="images/plus.png" alt="ALT" class="img-thumbnail"></a><div class="panel-row panel-title">添加</div></div></div>'
+		$("#myPanel #content").append(addBtn)
 		addListener()
 	},
 	search: function(keyword){
 		var searchTools = []
+		console.log("local tools", this.tools)
 		for (var i = 0; i < this.tools.length; i++) {
 			var tool = this.tools[i]
 			if(tool.title.toLowerCase().indexOf(keyword.toLowerCase()) >= 0){
@@ -132,6 +161,7 @@ var MyToolsAgent = {
 				searchTools.push(tool)
 			}
 		}
+		console.log("tools with keyword", searchTools)
 		MyToolsAgent.show(searchTools)
 	}
 }
@@ -189,100 +219,137 @@ var MarketToolsAgent = {
 	}
 }
 
+var BookmarkAgent = {
+	bookmarks: [],
+	isTree: function(obj){
+		if(obj.children == undefined){
+			return false
+		}
+		return true
+	},
+	getTree: function(){
+		BookmarkAgent.bookmarks = []
+		chrome.bookmarks.getTree(function(bookmarkTree){
+			//书签栏
+			console.log("bookmarkTree", bookmarkTree)
+			console.log("bookmarkTree[0]", bookmarkTree[0])
+			console.log("bookmarkTree[0].children", bookmarkTree[0].children)
+			var bookmarkBar = bookmarkTree[0].children[0].children
+			console.log("bookmarkBar", bookmarkBar)
+			bookmarkBar.forEach(function(ele, i){
+				if(!BookmarkAgent.isTree(ele)){
+					BookmarkAgent.bookmarks.push(ele)
+				}else{
+					BookmarkAgent.getNodesFromTree(ele)
+				}
+			})
+			console.log("bookmarks", BookmarkAgent.bookmarks)
 
+			//其他书签
+			var bookmarkOther = bookmarkTree[0].children[1]
+		})
+	},
+	getNodesFromTree: function(tree){
+		if(!this.isTree(tree)){
+			return
+		}
+		var nodes = tree.children
+		nodes.forEach(function(ele, i){
+			if(!BookmarkAgent.isTree(ele)){
+				BookmarkAgent.bookmarks.push(ele)
+				return
+			}else{
+				BookmarkAgent.getNodesFromTree(ele)
+			}
+		})
+	},
+	show: function(bookmarks){
+		console.log("show bookmarks", bookmarks)
+		$("#bookmarkPanel .list-group").html("")
+		if(!Array.isArray(bookmarks) || bookmarks.length <= 0){
+			return;
+		}
+		for (var i = 0; i < bookmarks.length; i++) {
+			var myTemplate = '<a href="URL"><li class="list-group-item BG">TITLE</li></a>';
+			var element = bookmarks[i]
+			var one = myTemplate.replace("URL", element.url).replace("TITLE", element.title)
+			if(i % 2 == 0){
+				one = one.replace("BG", "list-group-item-success")
+			}else{
+				one = one.replace("BG", "list-group-item-info")
+			}
+			$("#bookmarkPanel .list-group").append(one)
+		}
+		addListener()
+	},
+	search: function(keyword){
+		var bookmarks = []
+		for (var i = 0; i < this.bookmarks.length; i++) {
+			var bookmark = this.bookmarks[i]
+			if(bookmark.title.toLowerCase().indexOf(keyword.toLowerCase()) >= 0){
+				console.log(bookmark.title)
+				bookmarks.push(bookmark)
+			}
+		}
+		console.log("searched bookmarks", bookmarks)
+		BookmarkAgent.show(bookmarks)
+	}
+}
 
-
-$("#search").focus()
+$("#bookmark").click(function(){
+	PanelAgent.showPannel("bookmark")
+	BookmarkAgent.getTree()
+})
 
 $("#my").click(function(){
-	showMyPanel()
+	PanelAgent.showPannel("my")
+	MyToolsAgent.showTools()
 })
 
 $("#market").click(function(){
-	showMarketPanel()
+	PanelAgent.showPannel("market")
+	MarketToolsAgent.getTools()
 })
 
 $("#about").click(function(){
-	showAbout()
+	PanelAgent.showPannel("about")
 })
 
-
-function showMyPanel(){
-	isMy = true;
-	$(".nav").find("li").removeClass("active")
-	if($("#my").hasClass("active")){
-		return;
-	}
-	$("#my").addClass("active");
-
-	$("#myPanel").removeClass("hidden")
-	if(!$("#marketPanel").hasClass("hidden")){
-		$("#marketPanel").addClass("hidden")	
-	}
-	if(!$("#aboutPanel").hasClass("hidden")){
-		$("#aboutPanel").addClass("hidden")	
-	}
-	
-	$("#myPanel #search").focus()
-
-	MyToolsAgent.showTools()
+function bindEnter($dom){
+	$(document).keydown(function(e){
+	    if (e.which == 13){
+	        $dom.click();
+	    }
+	});
 }
 
-function showMarketPanel(){
-	isMy = false;
-	$(".nav").find("li").removeClass("active")
-	if($("#market").hasClass("active")){
-		return;
-	}
-	$("#market").addClass("active");
-	$("#marketPanel").removeClass("hidden")
-	if(!$("#myPanel").hasClass("hidden")){
-		$("#myPanel").addClass("hidden")	
-	}
-	if(!$("#aboutPanel").hasClass("hidden")){
-		$("#aboutPanel").addClass("hidden")	
-	}
-	$("#marketPanel #search").focus()
-	MarketToolsAgent.getTools()
-}
-
-function showAbout(){
-	$(".nav").find("li").removeClass("active")
-	if($("#about").hasClass("active")){
-		return;
-	}
-	$("#about").addClass("active");
-	$("#aboutPanel").removeClass("hidden")
-	if(!$("#myPanel").hasClass("hidden")){
-		$("#myPanel").addClass("hidden")	
-	}
-	if(!$("#marketPanel").hasClass("hidden")){
-		$("#marketPanel").addClass("hidden")	
-	}
-	$("#aboutPanel #search").focus()
-}
-
-$(document).keypress(function(e){
-    if (e.which == 13){
-        $("#searchBtn").click();
-    }
-});
-
-$("#searchBtn").click(function(){
-	var keyword = $.trim($("#search").val())
+$("#bookmarkPanel #searchBtn").click(function(){
+	var keyword = $.trim($("#bookmarkPanel #search").val())
+	console.log("bookmark search. keyword", keyword)
 	if(keyword == null || keyword == "" || keyword == undefined){
-		if(isMy){
-			MyToolsAgent.showTools()
-		}else{
-			MarketToolsAgent.showTools()
-		}
-		return;
+		BookmarkAgent.show([])
+		return
 	}
-	if(isMy){
-		MyToolsAgent.search(keyword)
-	}else{
-		MarketToolsAgent.search(keyword)
+	BookmarkAgent.search(keyword)
+})
+
+$("#myPanel #searchBtn").click(function(){
+	var keyword = $.trim($("#myPanel #search").val())
+	console.log("my search", keyword)
+	if(keyword == null || keyword == "" || keyword == undefined){
+		MyToolsAgent.showTools()
+		return
 	}
+	MyToolsAgent.search(keyword)
+})
+
+$("#marketPanel #searchBtn").click(function(){
+	var keyword = $.trim($("#marketPanel #search").val())
+	if(keyword == null || keyword == "" || keyword == undefined){
+		MarketToolsAgent.showTools()
+		return
+	}
+	MarketToolsAgent.search(keyword)
 })
 
 $(document).on("click", "#myPanel .collect", function(){
@@ -308,7 +375,8 @@ $(document).on("click", "#marketPanel .collect", function(){
 })
 
 $(document).on("click", "#go", function(){
-	showMarketPanel()
+	PanelAgent.showPannel("market")
+	MarketToolsAgent.getTools()
 })
 
 
@@ -318,11 +386,23 @@ function addListener(){
         (function () {
             var ln = links[i];
             var location = ln.href;
+            console.log(location)
+            if(location.endsWith("#")){
+            	return
+            }
             ln.onclick = function () {
                 chrome.tabs.create({active: true, url: location});
             };
         })();
     }
 }
+
+init()
+
+function init(){
+	PanelAgent.showPannel("my")
+	MyToolsAgent.showTools()
+}
+
 
 
