@@ -4,6 +4,7 @@
 
 'use strict';
 var isMy = true;
+var hasAddBtn = false;
 
 document.addEventListener('DOMContentLoaded', function () {
 	// MyToolsAgent.showTools()
@@ -110,6 +111,18 @@ var MyToolsAgent = {
 		this.tools.push(tool)
 		StoreAgent.setTools(this.tools);
 	},
+	addDefinedTool: function(tool){
+		console.log("addDefinedTool tool", tool)
+		var tools = this.getTools()
+		var maxId = 10000;
+		for (var i = 0; i < tools.length; i++) {
+			if(tools[i].id > maxId)
+				maxId = tools[i].id
+		}
+		tool.id = maxId + 1
+		tools.push(tool)
+		StoreAgent.setTools(this.tools);
+	},
 	removeTool: function(id){
 		console.log("removeTool id=", id)
 		console.log("this.tools", this.tools)
@@ -124,7 +137,7 @@ var MyToolsAgent = {
 		return false;
 	},
 	showTools: function(){
-		StoreAgent.getTools(this, function(tools){
+	StoreAgent.getTools(this, function(tools){
 			console.log("my tools", tools)
 			if(!Array.isArray(tools) || tools.length <= 0){
 				$("#myPanel #content").html("")
@@ -147,7 +160,7 @@ var MyToolsAgent = {
 			var one = myTemplate.replace("URL", element.url).replace("IMG", element.img).replace("ALT", element.title).replace("TITLE", element.title).replace("ID", element.id)
 			$("#myPanel #content").append(one)
 		}
-		var addBtn = '<div class="panel-element"><div class="panel-content"><a href="#"><img src="images/plus.png" alt="ALT" class="img-thumbnail"></a><div class="panel-row panel-title">添加</div></div></div>'
+		var addBtn = '<div id="addNew" class="panel-element"><div class="panel-content"><a href="#"><img src="images/plus.png" alt="ALT" class="img-thumbnail"></a><div class="panel-row panel-title">添加</div></div></div>'
 		$("#myPanel #content").append(addBtn)
 		addListener()
 	},
@@ -163,7 +176,7 @@ var MyToolsAgent = {
 		}
 		console.log("tools with keyword", searchTools)
 		MyToolsAgent.show(searchTools)
-	}
+	},
 }
 
 var MarketToolsAgent = {
@@ -313,6 +326,58 @@ $("#market").click(function(){
 
 $("#about").click(function(){
 	PanelAgent.showPannel("about")
+})
+
+
+$(document).on("change", "#addMore input[name=thumbnail]", function(){
+	var thumbnail = $.trim($("#addMore input[name=thumbnail]").val());
+	if(thumbnail == ""){
+		thumbnail = "images/placeholder.jpg"
+	}
+	$("#addMore #img").attr("src", thumbnail)
+})
+
+$(document).on("click", "#myPanel #content #addNew", function(){
+	if(hasAddBtn)
+		return
+	else
+		hasAddBtn = true;
+	var tt = '<div id="addMore" class="row"> \
+        <div class="img img-thumbnail"><img id="img" src="images/placeholder.jpg" alt="ALT" class="img-thumbnail"></div> \
+        <div class="content"> \
+          <input type="text" class="form-control" name="title" placeholder="名称"> \
+          <input type="text" class="form-control" name="thumbnail" placeholder="缩略图"> \
+          <input type="text" class="form-control" name="url" placeholder="URL"> \
+        </div> \
+        <div style="text-align: right; margin-top: 2px;"> \
+          <button style="margin-top: 5px;" id="save" type="submit" class="btn btn-success">保存</button> \
+          <button style="margin-top: 5px;" id="cancel" type="submit" class="btn btn-warning">取消</button> \
+        </div> \
+      </div>'
+
+    $("#myPanel #content").append(tt)
+})
+
+$(document).on("click", "#myPanel #content #save", function(){
+	var title = $.trim($("#myPanel #content input[name=title]").val())
+	var thumbnail = $.trim($("#myPanel #content input[name=thumbnail]").val())
+	var url = $.trim($("#myPanel #content input[name=url]").val())
+	if(title == "" || title == undefined
+		|| thumbnail == "" || thumbnail == undefined
+		|| url == "" || url == undefined)
+		return
+	var tool = {}
+	tool.title = title
+	tool.img = thumbnail
+	tool.url = url
+	MyToolsAgent.addDefinedTool(tool)
+	MyToolsAgent.showTools()
+	hasAddBtn = false;
+})
+
+$(document).on("click", "#myPanel #content #cancel", function(){
+	hasAddBtn = false;
+	MyToolsAgent.showTools()
 })
 
 function bindEnter($dom){

@@ -16,17 +16,17 @@
   }
   .panel-element{
     display: inline-block;
-    width: 120px;
-    height: 120px;
+    width: 90px;
+    height: 90px;
     margin-top: 30px;
     margin-bottom: 30px;
-    margin-left: 50px;
+    margin-left: 45px;
     text-align: center;
     position: relative;
   }
   .panel-element img{
-    width: 120px;
-    height: 120px;
+    width: 90px;
+    height: 90px;
   }
   /*#bookmarkPanel .panel-element .panel-content a{
     display: block;
@@ -56,14 +56,14 @@
   #bookmarkPanel .panel-element{
     display: block;
     width: 400px;
-    height: 120px;
+    height: 80px;
   }
 
   .panel-tag{
     position: absolute;
     z-index: 99;
     top: -16px;
-    font-size: 25px;
+    font-size: 20px;
   }
   .panel-title{
     text-overflow:ellipsis;
@@ -77,7 +77,7 @@
   .panel-tag .tag-right{
     display: inline-block;
     position: absolute;
-    left: 107px;
+    left: 78px;
     cursor: pointer;
   }
   .panel{
@@ -155,7 +155,7 @@
     background-color: white;
   }
   .panel-row{
-    width: 120px;
+    width: 80px;
   }
   .panel-like-num{
     width: 80px;
@@ -233,14 +233,20 @@
   }
   #addMore{
     width: 540px;
-    padding: 0px 0px 0px 80px;
+    padding: 20px 0px 0px 80px;
+    border-top: 1px dashed #ddd;
+    margin-top: 20px;
   }
   #addMore .img{
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     float: left;
     margin-top: 5px;
     background-color: #eee;
+  }
+  #addMore .img img{
+    width: 80px;
+    height: 70px;
   }
   #addMore .content{
     width: 340px;
@@ -303,18 +309,6 @@
             <span id="searchBtn" class="input-group-addon">🔍</span>
           </div>
           <div id="content" class="row">
-          </div>
-          <div id="addMore" class="row">
-            <div class="img img-thumbnail"></div>
-            <div class="content">
-              <input type="text" class="form-control" id="title" placeholder="名称">
-              <input type="text" class="form-control" id="thumbnail" placeholder="缩略图">
-              <input type="text" class="form-control" id="url" placeholder="URL">
-            </div>
-            <div style="text-align: right; margin-top: 2px;">
-              <button type="submit" class="btn btn-success">保存</button>
-              <button type="submit" class="btn btn-warning">取消</button>
-            </div>
           </div>
         </div>
       </div>
