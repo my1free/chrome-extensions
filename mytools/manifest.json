@@ -1,6 +1,6 @@
   {
     "name": "MyTools",
-    "version": "0.0.0.1",
+    "version": "0.0.0.3",
     "description": "MY工具箱",
     "permissions": ["activeTab", "bookmarks", "declarativeContent", "storage", "https://www.woainankai.com/*"],
     "background": {

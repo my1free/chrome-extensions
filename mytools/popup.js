@@ -466,6 +466,7 @@ init()
 
 function init(){
 	PanelAgent.showPannel("my")
+	$("#myPanel #search").focus()
 	MyToolsAgent.showTools()
 }
 
